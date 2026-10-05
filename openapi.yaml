@@ -1,0 +1,45 @@
+openapi: 3.1.0
+info:
+  title: AI Astrologer Calculation API
+  version: 1.0.0
+  description: Deterministic Vedic astrology calculations for the AI Astrologer.
+servers:
+  - url: https://REPLACE-WITH-YOUR-RENDER-SERVICE.onrender.com
+paths:
+  /vedic-chart:
+    post:
+      operationId: calculateVedicChart
+      summary: Calculate a Vedic birth chart and Vimshottari periods
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date,time,timezone,latitude,longitude]
+              properties:
+                date: {type: string, description: YYYY-MM-DD}
+                time: {type: string, description: Local birth time HH:MM or HH:MM:SS}
+                timezone: {type: string, description: IANA timezone such as Asia/Kolkata}
+                latitude: {type: number}
+                longitude: {type: number}
+                node_type: {type: string, enum: [mean,true], default: mean}
+      responses:
+        '200': {description: Calculated chart master}
+  /transits:
+    post:
+      operationId: calculateSiderealTransits
+      summary: Calculate Lahiri sidereal planetary transits for a requested date
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [date]
+              properties:
+                date: {type: string, description: YYYY-MM-DD}
+                time: {type: string, default: '12:00'}
+                timezone: {type: string, default: UTC}
+      responses:
+        '200': {description: Sidereal transit positions}
